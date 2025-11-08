@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Input } from '@/components/ui/input';
@@ -24,7 +25,7 @@ import { promptsApi } from '@/lib/api/client';
 import { CATEGORIES, AI_PLATFORMS } from '@/lib/types/index';
 import type { Prompt } from '@/lib/types/index';
 
-export default function ExplorePage() {
+function ExplorePageContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { user, isAuthenticated, logout } = useAuthStore();
@@ -458,5 +459,18 @@ function PromptCard({ prompt, onClick }: { prompt: Prompt; onClick: () => void }
                 )}
             </div>
         </Card>
+    );
+}
+
+// Main export with Suspense wrapper
+export default function ExplorePage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-950">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+            </div>
+        }>
+            <ExplorePageContent />
+        </Suspense>
     );
 }
