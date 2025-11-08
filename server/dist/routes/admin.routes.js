@@ -1,0 +1,20 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const admin_controller_1 = require("../controllers/admin.controller");
+const auth_middleware_1 = require("../middleware/auth.middleware");
+const role_middleware_1 = require("../middleware/role.middleware");
+const router = (0, express_1.Router)();
+router.use(auth_middleware_1.authenticate);
+router.use(role_middleware_1.requireAdmin);
+router.get('/users', (req, res) => admin_controller_1.adminController.getAllUsers(req, res));
+router.get('/users/:userId', (req, res) => admin_controller_1.adminController.getUserById(req, res));
+router.put('/users/:userId/status', (req, res) => admin_controller_1.adminController.toggleUserStatus(req, res));
+router.put('/users/:userId/monetization', (req, res) => admin_controller_1.adminController.toggleMonetization(req, res));
+router.put('/users/:userId/verification', (req, res) => admin_controller_1.adminController.toggleUserVerification(req, res));
+router.delete('/users/:userId', (req, res) => admin_controller_1.adminController.deleteUser(req, res));
+router.get('/prompts', (req, res) => admin_controller_1.adminController.getAllPrompts(req, res));
+router.put('/prompts/:promptId/status', (req, res) => admin_controller_1.adminController.togglePromptStatus(req, res));
+router.get('/stats', (req, res) => admin_controller_1.adminController.getPlatformStats(req, res));
+exports.default = router;
+//# sourceMappingURL=admin.routes.js.map

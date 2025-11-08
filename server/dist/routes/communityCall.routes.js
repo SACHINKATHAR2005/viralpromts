@@ -1,0 +1,21 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const communityCall_controller_1 = require("../controllers/communityCall.controller");
+const auth_middleware_1 = require("../middleware/auth.middleware");
+const router = (0, express_1.Router)();
+router.get('/', auth_middleware_1.optionalAuthenticate, communityCall_controller_1.CommunityCallController.getCalls);
+router.get('/:callId', auth_middleware_1.optionalAuthenticate, communityCall_controller_1.CommunityCallController.getCall);
+router.use(auth_middleware_1.authenticate);
+router.post('/', communityCall_controller_1.CommunityCallController.createCall);
+router.put('/:callId', communityCall_controller_1.CommunityCallController.updateCall);
+router.post('/:callId/cancel', communityCall_controller_1.CommunityCallController.cancelCall);
+router.post('/:callId/register', communityCall_controller_1.CommunityCallController.registerForCall);
+router.post('/:callId/unregister', communityCall_controller_1.CommunityCallController.unregisterFromCall);
+router.post('/:callId/start', communityCall_controller_1.CommunityCallController.startCall);
+router.post('/:callId/end', communityCall_controller_1.CommunityCallController.endCall);
+router.post('/:callId/attendance', communityCall_controller_1.CommunityCallController.markAttendance);
+router.post('/:callId/feedback', communityCall_controller_1.CommunityCallController.addFeedback);
+router.get('/user/my-calls', communityCall_controller_1.CommunityCallController.getUserCalls);
+exports.default = router;
+//# sourceMappingURL=communityCall.routes.js.map

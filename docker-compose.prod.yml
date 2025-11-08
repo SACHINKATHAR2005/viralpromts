@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.prod
+    container_name: viralprompts-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=https://viralprompts.sachinkathar.tech/api
+    depends_on:
+      - backend
+    networks:
+      - viralprompts-network
+    restart: always
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.prod
+    container_name: viralprompts-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - MONGODB_URI=mongodb://mongo:27017/viralprompts
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=${JWT_SECRET}
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - CORS_ORIGIN=https://viralprompts.sachinkathar.tech
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - viralprompts-network
+    restart: always
+
+  mongo:
+    image: mongo:7
+    container_name: viralprompts-mongo
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - viralprompts-network
+    restart: always
+
+  redis:
+    image: redis:alpine
+    container_name: viralprompts-redis
+    volumes:
+      - redis-data:/data
+    networks:
+      - viralprompts-network
+    restart: always
+
+volumes:
+  mongo-data:
+  redis-data:
+
+networks:
+  viralprompts-network:
+    driver: bridge
