@@ -27,7 +27,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=5000
-      - MONGODB_URI=mongodb://mongo:27017/viralprompts
+      - MONGO_URI=mongodb://mongo:27017/viralprompts
       - REDIS_URL=redis://redis:6379
       - JWT_SECRET=${JWT_SECRET}
       - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
